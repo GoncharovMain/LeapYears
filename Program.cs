@@ -21,14 +21,10 @@
         {
             if (start_year <= end_year)
             {
-                // if (start_year % 4 == 0)
-                // {
-                //     count_leap_years++;
-                // }
-                //count_leap_years + (IsLeap(year) ? 1 : 0);
                 return GetLeapYearsRec(start_year + 1, end_year, count_leap_years += (IsLeap(start_year) ? 1 : 0));
             }
             return count_leap_years;
+
         }
         public static void Foo(int a = 5) // необязательный параметр
         {
