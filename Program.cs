@@ -24,23 +24,18 @@
             Console.WriteLine("count leap years: -> " + GetLeapYearsRec(2000, 2030));
 
             int sum = for_rec(1, 10);
-            Console.WriteLine(sum);
+            Console.WriteLine("get sum with rec:" + sum);
 
-            for_cycle(1, 10);
-            Console.WriteLine();
+            sum = for_cycle(1, 10);
+            Console.WriteLine("get sum with for:" + sum);
         }
-        public static void for_cycle(int start, int end)
+        public static int for_cycle(int start, int end)
         {
-
             int sum = 0;
-            for (int i = start; i <= end; i++)
-            {
-
-                sum += i;
-            }
-            Console.WriteLine();
+            for (int i = start; i <= end; sum += i, i++) ;
+            return sum;
         }
         public static int for_rec(int start, int end, int sum = 0)
-            => start >= end ? sum : for_rec(start + 1, end, sum + start);
+            => start > end ? sum : for_rec(start + 1, end, sum + start);
     }
 }
