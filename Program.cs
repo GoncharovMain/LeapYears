@@ -18,14 +18,8 @@
             Console.WriteLine("количество високосных годов в дипазоне:" + count_leap_years);
         }
         public static int GetLeapYearsRec(int start_year, int end_year, int count_leap_years = 0)
-        {
-            if (start_year <= end_year)
-            {
-                return GetLeapYearsRec(start_year + 1, end_year, count_leap_years += (IsLeap(start_year) ? 1 : 0));
-            }
-            return count_leap_years;
+            => start_year <= end_year ? GetLeapYearsRec(start_year + 1, end_year, count_leap_years += (IsLeap(start_year) ? 1 : 0)) : count_leap_years;
 
-        }
         public static void Foo(int a = 5) // необязательный параметр
         {
             Console.WriteLine(a);
