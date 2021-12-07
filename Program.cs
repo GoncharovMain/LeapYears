@@ -28,6 +28,14 @@
 
             sum = for_cycle(1, 10);
             Console.WriteLine("get sum with for:" + sum);
+
+
+            var array = new List<int> { 5, 12, 50, -6, 17, 209, 10, -1 };
+            var sort_array = QuickSort(array);
+
+            array.ForEach(item => Console.Write(item + " "));
+            Console.WriteLine();
+            sort_array.ForEach(item => Console.Write(item + " "));
         }
         public static int for_cycle(int start, int end)
         {
@@ -35,7 +43,15 @@
             for (int i = start; i <= end; sum += i, i++) ;
             return sum;
         }
+
         public static int for_rec(int start, int end, int sum = 0)
             => start > end ? sum : for_rec(start + 1, end, sum + start);
+
+        public static List<int> QuickSort(List<int> array)
+         => array.Count() >= 2 ?
+                 QuickSort(array.Where(item => item > array[0]).ToList())
+                .Concat(new List<int> { array[0] })
+                .Concat(QuickSort(array.Where(item => item < array[0]).ToList())).ToList() : array;
+
     }
 }
