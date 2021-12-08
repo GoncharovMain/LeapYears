@@ -7,6 +7,9 @@
 		CountLeapYearsRec - считает сколько высокосных годов в диапазоне [start_year, end_year]
 		QuickSort - быстрая сортировка
 
+    math
+        CountLeapYearsMath - считает сколько высокосных годов в диапазоне [start_year, end_year]
+
 	IsLeap - високосный год или нет
 */
 
@@ -52,26 +55,35 @@ namespace Year
 
             Console.WriteLine();
 
-            using (StreamWriter writer = new StreamWriter("test.txt"))
-            {
-
-                for (int bias = 1; bias < 15; bias++)
-                {
-                    writer.WriteLine("//[start_year - end_year] = [{0}]", bias);
-                    writer.WriteLine("//\t\t\t\ttest => real");
-                    for (int year = 2000; year <= 2009; year++)
-                    {
-                        int test = CountLeapYearsMath(year, year + bias);
-                        int real = CountLeapYearsFor(year, year + bias);
-
-                        writer.WriteLine($"//\t[{year}, {year + bias}] => {test:0.###} => {real} => {test == real}");
-                    }
-                    writer.WriteLine();
-                }
-            }
+            TestLeapYears();
 
         }
 
+        public static void TestLeapYears()
+        {
+
+            List<int> biases = Enumerable.Range(1, 5).ToList();
+            List<int> years = Enumerable.Range(2000, 16).ToList();
+
+            Console.WriteLine(String.Join(" ", years));
+
+            using (StreamWriter writer = new StreamWriter("test.txt"))
+            {
+                biases.ForEach(bias =>
+                {
+                    writer.WriteLine($"bias: [{bias}]");
+                    years.ForEach(year =>
+                    {
+                        int leap_math = CountLeapYearsMath(year, year + bias);
+                        int leap_for = CountLeapYearsFor(year, year + bias);
+
+                        writer.WriteLine($"[{year},{year + bias}] => "
+                        + $"{leap_math} == {leap_for} => {leap_math == leap_for}");
+                    });
+                    writer.WriteLine();
+                });
+            }
+        }
         public static int CountLeapYearsMath(int start_year, int end_year)
         {
             int left_leap = (start_year % 4 > 0 ? 4 : 0) + ((int)(start_year / 4)) * 4;
