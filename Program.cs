@@ -34,7 +34,9 @@ namespace Year
 
             List<int> list = new List<int> { 5, 12, 50, -6, 17, 209, 10, -1 };
 
-            list.ForEach(item => Console.WriteLine(item + " "));
+            list.ForEach(item => Console.Write(item + " "));
+
+            Console.WriteLine();
 
 
             Console.WriteLine("Sort with quick sort");
@@ -49,7 +51,35 @@ namespace Year
             list.OrderBy(item => item).ToList().ForEach(item => Console.Write(item + " "));
 
             Console.WriteLine();
+
+            using (StreamWriter writer = new StreamWriter("test.txt"))
+            {
+
+                for (int bias = 1; bias < 15; bias++)
+                {
+                    writer.WriteLine("//[start_year - end_year] = [{0}]", bias);
+                    writer.WriteLine("//\t\t\t\ttest => real");
+                    for (int year = 2000; year <= 2009; year++)
+                    {
+                        int test = CountLeapYearsMath(year, year + bias);
+                        int real = CountLeapYearsFor(year, year + bias);
+
+                        writer.WriteLine($"//\t[{year}, {year + bias}] => {test:0.###} => {real} => {test == real}");
+                    }
+                    writer.WriteLine();
+                }
+            }
+
         }
+
+        public static int CountLeapYearsMath(int start_year, int end_year)
+        {
+            int left_leap = (start_year % 4 > 0 ? 4 : 0) + ((int)(start_year / 4)) * 4;
+            int right_leap = ((int)(end_year / 4)) * 4;
+
+            return 1 + (right_leap - left_leap) / 4;
+        }
+
         public static int CountLeapYearsFor(int start_year, int end_year)
         {
             int count_leap_years = 0;
@@ -67,8 +97,16 @@ namespace Year
             return sum;
         }
         public static int for_rec(int start, int end, int sum = 0) => start > end ? sum : for_rec(start + 1, end, sum + start);
-        public static int CountLeapYearsRec(int start_year, int end_year, int count_leap_years = 0) => start_year <= end_year ? CountLeapYearsRec(start_year + 1, end_year, count_leap_years += (IsLeap(start_year) ? 1 : 0)) : count_leap_years;
-        public static List<int> QuickSort(List<int> list) => list.Count() >= 2 ? QuickSort(list.Where(item => item < list[0]).ToList()).Concat(new List<int> { list[0] }).Concat(QuickSort(list.Where(item => item > list[0]).ToList())).ToList() : list;
+        public static int CountLeapYearsRec(int start_year, int end_year, int count_leap_years = 0)
+            => start_year <= end_year ?
+                CountLeapYearsRec(start_year + 1, end_year, count_leap_years += (IsLeap(start_year) ? 1 : 0))
+                : count_leap_years;
+        public static List<int> QuickSort(List<int> list)
+            => list.Count() >= 2 ?
+                QuickSort(list.Where(item => item < list[0]).ToList())
+                .Concat(new List<int> { list[0] })
+                .Concat(QuickSort(list.Where(item => item > list[0]).ToList())).ToList()
+                : list;
 
     }
 }
