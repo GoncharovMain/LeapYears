@@ -12,6 +12,7 @@
 
 	IsLeap - високосный год или нет
 */
+using System.Diagnostics;
 
 namespace Year
 {
@@ -57,6 +58,23 @@ namespace Year
 
             TestLeapYears();
 
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine("Jenya");
+                TestTime(CountLeapYearsMathJ);
+
+                Console.WriteLine("Yura");
+                TestTime(CountLeapYearsMath);
+
+
+                Console.WriteLine();
+            }
+
+        }
+        public static bool IsOdd(int number)
+        {
+            Console.WriteLine("Проверяем чило " + number);
+            return number % 2 == 0;
         }
 
         public static void TestLeapYears()
@@ -65,16 +83,14 @@ namespace Year
             List<int> biases = Enumerable.Range(1, 5).ToList();
             List<int> years = Enumerable.Range(2000, 16).ToList();
 
-            Console.WriteLine(String.Join(" ", years));
-
             using (StreamWriter writer = new StreamWriter("test.txt"))
             {
                 biases.ForEach(bias =>
                 {
-                    writer.WriteLine($"bias: [{bias}]");
+                    writer.WriteLine($"bias: [{bias}]x");
                     years.ForEach(year =>
                     {
-                        int leap_math = CountLeapYearsMath(year, year + bias);
+                        int leap_math = CountLeapYearsMathJ(year, year + bias);
                         int leap_for = CountLeapYearsFor(year, year + bias);
 
                         writer.WriteLine($"[{year},{year + bias}] => "
@@ -84,10 +100,38 @@ namespace Year
                 });
             }
         }
+        public delegate int function(int a, int b);
+        public static void TestTime(function func)
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            for (int i = 0; i < 100000000 * 4; i++)
+            {
+                func(2001, 2065);
+            }
+            stopWatch.Stop();
+
+            TimeSpan ts = stopWatch.Elapsed;
+
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00000}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds);
+            Console.WriteLine("RunTime " + elapsedTime);
+
+        }
+
+        public static int CountLeapYearsMathJ(int start_year, int end_year)
+        {
+            return (start_year % 4 != 0 & end_year % 4 != 0) ?
+                (end_year / 4) - (start_year / 4)
+                : ((end_year - start_year) / 4) + 1;
+        }
+
         public static int CountLeapYearsMath(int start_year, int end_year)
         {
-            int left_leap = (start_year % 4 > 0 ? 4 : 0) + ((int)(start_year / 4)) * 4;
-            int right_leap = ((int)(end_year / 4)) * 4;
+            int left_leap = (start_year % 4 > 0 ? 4 : 0) + (start_year / 4) * 4;
+            int right_leap = (end_year / 4) * 4;
 
             return 1 + (right_leap - left_leap) / 4;
         }
